@@ -1,0 +1,232 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Historias del mundo</title>
+
+<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.1.0.min.css" />
+<link rel="stylesheet" type="text/css" href="jqplayer/skin/myskin/jplayer.pink.flag.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="jqplayer/skin/blue.monday/jplayer.blue.monday.css"/> -->
+<style type="text/css">
+	.nowPlaying{
+		padding: 0px 10px 30px 60px;
+		font-size: 1.2em;
+		width:100%;
+		text-align:left;
+		background: url(images/play.png) no-repeat left 12%;
+		min-height:40px;
+		display: block;
+		text-decoration:none;
+	};
+	.playerTitle{margin: 24px 12px}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+	 $(document).bind("mobileinit", function() {
+          $.mobile.page.prototype.options.addBackBtn = true;
+     });
+</script>
+<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+
+<script type="text/javascript">
+ $(document).ready(function() {
+	
+	var opened = false;
+	var mp3media ="";
+	var elPlayer = $("#el_jplayer");
+
+	function loadPlayer(mp3media){
+		elPlayer.jPlayer("destroy");
+		elPlayer.jPlayer({
+	        ready: function(event) {
+	            $(this).jPlayer("setMedia", {mp3: mp3media});
+	            $(this).jPlayer("swfPath", "http://www.jplayer.org/2.1.0/js");
+	            $(this).jPlayer("supplied", "mp3");
+	            $(this).jPlayer("play", 1);
+	            $(this).jPlayer("volume", 1.5);
+			}
+	    });
+	}
+
+	var historyView = {
+
+		loadPlayer: function(){			
+			/*Historias page init binding*/
+			var mp3media = $('mediaurl', this)
+			$("#playerPage").bind('pageinit', function(){
+				loadPlayer(mp3media);
+			});//page init eof 
+		},
+
+		getList : function(){
+		
+			var elink = this.elink;
+
+			$.getJSON('loadxml.php', function(json){
+			    $.each(json.channel.item,function(i,item) {
+			     	title = item.title;
+			     	title = title.replace("Historia del Mundo- ", "")
+					elink = this.enclosure["@attributes"].url;
+					//print every item
+					historyView.printItem(title, elink);
+			   	});
+		 	});
+			
+		},//getList eof  
+		
+		printItem : function(title, elink){
+			$("#fullist").append(
+				$('<li>').append(
+					$('<a>').attr("mediaurl", elink).attr("href", '#playerPage').attr("data-transition", "slide").on("click", function(){
+						console.log(elink);
+						loadPlayer(elink);
+						$(".playerTitle").text(title);
+						$("#activePlay").text(title).on("click", function(){  })
+						var padre = $(this).parent().parent().parent();
+						padre.css("opacity", "0.5");
+						return opened = true;
+					}).append(
+						$('<span>').attr('class', 'episodio').append(title))));
+			historyView.refreshList();
+		},
+
+		refreshList : function(){
+			$("#fullist").listview("refresh");
+			//$.mobile.hidePageLoadingMsg();
+		},
+	};//historias eof
+
+	$("#acaracol").bind('pageinit', function(){
+		historyView.getList();
+		elPlayer.jPlayer("play");
+		$("#activePlay").hide();
+	});//page init eof 
+	$("#acaracol").bind('pageshow', function(){
+		if(!opened){
+			console.log("no estoy seguro de haberte visto");
+			$("#activePlay").hide();
+		}else{
+			console.log("volviste?");
+			$("#activePlay").show();
+		}
+	});//pageshow eof 
+ });
+</script>
+
+</head> 
+<body> 
+
+
+<!-- MAIN PAGE -->
+<div data-role="page" id="page">
+	<div data-role="header">
+		<h1>Historias del mundo</h1>
+	</div>
+	
+	<div data-role="content">	
+		<ul id="capitulos" data-role="listview" >
+			<li><a href="#acaracol" data-transition="slide">Archivo Caracol</a></li>
+		</ul>		
+	</div>
+	
+	<div data-role="footer">
+		<h4>Por: Diana Uribe</h4>
+	</div>
+</div>
+
+	<!-- Caracol Page -->
+	<div data-role="page" id="acaracol">
+		
+		<div data-role="header">
+			<h1>Archivo Caracol</h1>
+		</div>
+
+		<div data-role="content">	
+			
+			<div>
+				<a id="activePlay" href="#playerPage" data-transition="slidedown" class="nowPlaying"></a>
+			</div><!-- /navbar -->
+			
+			<ul  id="fullist" data-role="listview">
+				<!-- List holder -->
+			</ul>
+
+		</div>
+
+		<div data-role="footer">
+			<h4>Por: Diana Uribe</h4>
+		</div>
+	</div>
+
+	<!-- Player Page -->
+	<div data-role="page" id="playerPage">
+		
+		<div id="playerTitle" data-role="header"><h1>Historias del mundo</h1></div>
+		<div data-role="content">
+			<!-- Audio player -->
+			<div id="el_jplayer" class="jp-jplayer"></div>
+	        
+	        <div id="jp_container_1" class="jp-audio">
+	            <div class="jp-type-single">
+	                <div class="jp-gui jp-interface">
+	                    
+	                    <ul class="jp-controls">
+	                        <!-- comment out any of the following <li>s to remove these buttons -->
+	                        <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+	                        <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+	                        <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+	                        <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+	                        <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+	                        <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
+	                    </ul>
+	                    
+	                    <!-- you can comment out any of the following <div>s too -->
+	                    
+	                    <div class="jp-progress">
+	                        <div class="jp-seek-bar">
+	                            <div class="jp-play-bar"></div>
+	                        </div>
+	                    </div>
+	                    <div class="jp-volume-bar">
+	                        <div class="jp-volume-bar-value"></div>
+	                    </div>
+	                    <div class="jp-current-time"></div>
+	                    <div class="jp-duration"></div>                   
+	                </div>
+	                <div class="jp-title">
+	                    <ul>
+	                        <li class="playerTitle"></li>
+	                    </ul>
+	                </div>
+	                <div class="jp-no-solution">
+	                    <span>Update Required</span>
+	                    To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+	                </div>
+	            </div>
+	        </div>
+	        <!-- Audio player eof-->
+
+	        <a href="http://google.com" target="_blank" data-icon="search" data-role="button">Buscar algo?</a>
+
+		</div><!-- content eof -->
+		<div data-role="footer"><h4>Por: Diana Uribe</h4></div>
+	</div>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-31511662-1']);
+  _gaq.push(['_setDomainName', 'artyficial.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

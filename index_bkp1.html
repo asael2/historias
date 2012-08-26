@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery Mobile Web App</title>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+
+<script type="text/javascript">
+ $(document).ready(function() {
+
+
+
+	var historias = {
+		
+		getList : function(){
+					
+		/*	$.ajax({
+ 				url: 'loadxml.php',
+ 				dataType: 'json',
+  					success: function(data) {
+						var lista = data.channel;			
+						var elink = data.channel.item;
+						historias.printList(lista, elink)
+						//console.log(elink);
+  					}
+			});*/
+
+
+		var title, elink;
+
+
+ 		$.getJSON('loadxml.php', function(json){
+
+		    $.each(json.channel.item,function(i,item) {
+				
+		     	title = item.title;			
+				elink = this.enclosure["@attributes"].url;
+				//historias.printList(lista, elink);
+				$("#fullist").append(
+					$('<li>').append($('<a>').attr('href',elink).append($('<span>').attr('class', 'episodio').append(title)))
+				);
+
+		    });
+
+		 });
+
+
+		},//getList eof
+
+		printList : function(lista, elink){
+
+			//for (var i=0; i<lista.item.length; i++){				
+				var titulo = this.lista.title;
+				var vinculo = elink;
+				//console.log(vinculo);
+
+				   // $('a').attr('rel');
+
+				titulo = titulo.replace('Historia del Mundo- ', '');	
+
+				$("#fullist").append(
+					$('<li>').append($('<a>').attr('href',vinculo).append($('<span>').attr('class', 'episodio').append(titulo)))
+				);
+			//};			
+
+		}//printList eof
+	};
+
+	/*Map page init binding*/
+	$("#acaracol").bind('pageinit', function(){
+		historias.getList();
+		//alert('pageinit')
+	});//page init eof 
+
+		
+
+ });
+</script>
+
+</head> 
+<body> 
+
+
+<!-- MAIN PAGE -->
+<div data-role="page" id="page">
+	<div data-role="header">
+		<h1>Historias del mundo</h1>
+	</div>
+	
+	<div data-role="content">	
+		<ul data-role="listview">
+			<li><a href="#acaracol">Archivo Caracol</a></li>
+            <li><a href="#">Proximamente</a></li>
+		</ul>		
+	</div>
+	
+	<div data-role="footer">
+		<h4>Por: Diana Uribe</h4>
+	</div>
+</div>
+
+<!-- Caracol Page -->
+<div data-role="page" id="acaracol">
+	
+	<div data-role="header">
+		<h1>Archivo Caracol</h1>
+	</div>
+
+	<div data-role="content">	
+		Listado de Caracol Radio. Todos los derechos sus productores reservados.
+		<ul  id="fullist" data-role="listview">
+			<!-- List holder -->
+		</ul>
+
+	</div>
+
+	<div data-role="footer">
+		<h4>Por: Diana Uribe</h4>
+	</div>
+
+</div>
+
+</body>
+</html>

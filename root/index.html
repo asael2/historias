@@ -1,0 +1,132 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Historias del mundo</title>
+<!--CSS-->
+<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.1.0.min.css" />
+<link rel="stylesheet" type="text/css" href="jqplayer/skin/myskin/jplayer.pink.flag.css"/>
+<link rel="stylesheet" type="text/css" href="css/custom.css"/>
+<!--JS-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+	 $(document).bind("mobileinit", function() {
+          $.mobile.page.prototype.options.addBackBtn = true;
+     });
+</script>
+<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+
+</head> 
+<body> 
+
+
+<!-- MAIN PAGE -->
+<div data-role="page" id="page">
+	<div data-role="header">
+		<h1>Historias del Mundo por: Diana Uribe</h1>
+	</div>
+	
+	<div data-role="content">	
+		<ul id="capitulos" data-role="listview" >
+			<li><a href="#acaracol" data-transition="slide">Audios, archivo Caracol &raquo;</a></li>
+		</ul>		
+	</div>
+	
+	<div data-role="footer">
+		
+		<h6> Propositos educativos y culturales | Copyrigth perteneciente a sus creadores.</h6>
+		<h5>Version Beta 1.0. <a href="mailto: artyficialmedia@gmail.com">Info.</a></h5>
+
+	</div>
+</div>
+
+<!-- Caracol Page -->
+<div data-role="page" id="acaracol">
+	
+	<div data-role="header">
+		<h1>Archivo Caracol</h1>
+	</div>
+
+	<div data-role="content">	
+		
+		<div>
+			<a id="activePlay" href="#playerPage" data-transition="slidedown" class="nowPlaying"></a>
+		</div><!-- /navbar -->
+		
+		<ul  id="fullist" data-role="listview">
+			<!-- List holder -->
+		</ul>
+
+	</div>
+
+	<div data-role="navbar" data-position="fixed">
+		<ul>
+		 	<li><a href="#acaracol/../" data-role="button" data-icon="home">Inicio</a></li>
+		</ul>
+	</div>
+
+</div>
+
+<!-- Player Page -->
+<div data-role="page" id="playerPage">
+	
+	<div id="playerTitle" data-role="header"><h1>Historias del mundo</h1></div>
+	<div data-role="content">
+		<!-- Audio player -->
+		<div id="el_jplayer" class="jp-jplayer"></div>
+        
+        <div id="jp_container_1" class="jp-audio">
+            <div class="jp-type-single">
+                <div class="jp-gui jp-interface">
+                    
+                    <ul class="jp-controls">
+                        <!-- comment out any of the following <li>s to remove these buttons -->
+                        <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+                        <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+                        <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+                        <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+                        <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+                        <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
+                    </ul>
+                    
+                    <!-- you can comment out any of the following <div>s too -->
+                    
+                    <div class="jp-progress">
+                        <div class="jp-seek-bar">
+                            <div class="jp-play-bar"></div>
+                        </div>
+                    </div>
+                    <div class="jp-volume-bar">
+                        <div class="jp-volume-bar-value"></div>
+                    </div>
+                    <div class="jp-current-time"></div>
+                    <div class="jp-duration"></div>                   
+                </div>
+                <div class="jp-title">
+                    <ul>
+                        <li class="playerTitle"></li>
+                    </ul>
+                </div>
+                <div class="jp-no-solution">
+                    <span>Update Required</span>
+                    To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                </div>
+            </div>
+        </div>
+        <!-- Audio player eof-->
+
+        <a href="http://google.com" target="_blank" data-icon="search" data-role="button">Buscar algo?</a>
+
+	</div><!-- content eof -->
+	<div data-role="navbar" data-position="fixed">
+		<ul>
+		 	<li><a href="#acaracol/../" data-role="button" data-icon="home" id="onlyHome">Inicio</a></li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript" src="js/gstats.js"></script>
+</body>
+</html>
